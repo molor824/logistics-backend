@@ -1,18 +1,16 @@
 const handler = (err, req, res, next) => {
+  console.error(err);
   try {
-    let { status, error } = JSON.parse(err.message);
+    const { status, error } = JSON.parse(err.message);
     if (typeof status !== "number") {
       throw err;
     }
-    console.error(status, error);
-    res.status = status;
-    res.json(error);
+    res.status(status).json(error);
   } catch {
-    console.error(err);
-    if (res.status === 200) {
-      res.status = 500;
-    }
-    res.text(err);
+    res.status(500).json({
+      type: "UNHANDLED_ERROR",
+      message: err.message,
+    });
   }
 };
 export default handler;

@@ -1,17 +1,22 @@
+import { configDotenv } from "dotenv";
+configDotenv();
 import express from "express";
 import * as errors from "./error/errors.js";
 import errorHandler from "./error/handler.js";
+import userRouter from "./router/user.js";
+import cookieParser from "cookie-parser";
 
-const PORT = 8123;
-let app = express();
+const PORT = process.env.PORT || 8123;
+const app = express();
 
-app.get("/", (req, res, next) => {
-  try {
-    res.json("Hello, world!");
-  } catch (e) {
-    next(e);
-  }
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+app.get("/", (req, res) => {
+  res.json("Welcome to logistics api.");
 });
+app.use("/api/user", userRouter);
 app.all("*", (req, res, next) => {
   next(errors.notFoundURL(req.url));
 });
