@@ -1,10 +1,18 @@
-import { configDotenv } from "dotenv";
-configDotenv();
+import dotenv from "dotenv";
 import express from "express";
 import * as errors from "./error/errors.js";
-import errorHandler from "./error/handler.js";
+import errorHandler from "./firmware/errorHandler.js";
 import userRouter from "./router/user.js";
 import cookieParser from "cookie-parser";
+import mongoose from "mongoose";
+
+dotenv.config();
+
+const { MONGO_URI } = process.env;
+if (!MONGO_URI) throw new Error("Mongo URI not found");
+
+const db = await mongoose.connect(MONGO_URI);
+console.log(`MongoDB connected to ${db.connection.host}:${db.connection.port}`);
 
 const PORT = process.env.PORT || 8123;
 const app = express();

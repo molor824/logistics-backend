@@ -1,4 +1,4 @@
-const handler = (err, req, res, next) => {
+const errorHandler = (err, req, res, next) => {
   console.error(err);
   try {
     const { status, error } = JSON.parse(err.message);
@@ -13,4 +13,4 @@ const handler = (err, req, res, next) => {
     });
   }
 };
-export default handler;
+export default errorHandler;
