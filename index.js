@@ -3,6 +3,7 @@ import express from "express";
 import * as errors from "./error/errors.js";
 import errorHandler from "./firmware/errorHandler.js";
 import userRouter from "./router/user.js";
+import customerCompanyRouter from "./router/finance/contact-info/customer-companies.js";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 
@@ -20,11 +21,12 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use("/api/user", userRouter);
+app.use("/api/finance/contact-info/customer-companies", customerCompanyRouter);
 
 app.get("/", (req, res) => {
   res.json("Welcome to logistics api.");
 });
-app.use("/api/user", userRouter);
 app.all("*", (req, res, next) => {
   next(errors.notFoundURL(req.url));
 });

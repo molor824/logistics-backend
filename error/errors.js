@@ -25,6 +25,9 @@ export function invalidToken() {
 export function userNotAdmin() {
   return statusMessage(403, { type: "USER_NOT_ADMIN" });
 }
+export function userNotFinance() {
+  return statusMessage(403, { type: "USER_NOT_FINANCE" });
+}
 export function userNotFound() {
   return statusMessage(404, { type: "USER_NOT_FOUND" });
 }

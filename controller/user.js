@@ -2,25 +2,34 @@ import User from "../model/user.js";
 import asyncHandler from "../firmware/asyncHandler.js";
 import { passwordInvalid, userNotFound } from "../error/errors.js";
 import { generateToken } from "../util/jwt.js";
+import bcrypt from "bcrypt";
 
 const MAX_AGE = 1000 * 3600;
 
 export const userValidationSchema = {
-  email: { type: "email", required: true },
-  phoneNumber: { type: "phone", required: true },
-  lastName: { type: "string", required: true },
-  firstName: { type: "string", required: true },
+  email: { type: "email", required: true, min: 4 },
+  phoneNumber: { type: "phone", required: true, min: 8 },
+  registrationNumber: { type: "string", min: 8, required: true },
+  gender: { type: "enum", enums: ["M", "F"], required: true },
+  lastName: { type: "string", required: true, min: 2 },
+  firstName: { type: "string", required: true, min: 2 },
   age: { type: "number", required: true },
   role: { type: "enum", enums: ["ADMIN", "FINANCE"], required: true },
+  password: { type: "string", required: true, min: 8 },
 };
 export const loginValidationSchema = {
   email: { type: "email", required: true },
   password: { type: "string", required: true },
 };
 export const addUser = asyncHandler(async (req, res) => {
-  const newUser = new User(req.body);
-  const savedUser = await newUser.save();
-  res.json({ ...savedUser, password: undefined, __v: undefined });
+  const { body, user } = req;
+  const newUser = new User({
+    ...body,
+    password: bcrypt.hashSync(body.password, 10),
+    signedBy: user._id,
+  });
+  await newUser.save();
+  res.json("OK");
 });
 
 function respondTokenCookie(token, res) {
@@ -59,6 +68,30 @@ export const logout = asyncHandler((req, res) => {
   res.json("OK");
 });
 export const getProfile = asyncHandler(async (req, res) => {
-  const { email, phoneNumber, lastName, firstName, age, role } = req.user;
-  res.json({ email, phoneNumber, lastName, firstName, age, role });
+  const {
+    email,
+    signedBy,
+    phoneNumber,
+    lastName,
+    firstName,
+    age,
+    role,
+    gender,
+    registrationNumber,
+  } = req.user;
+  res.json({
+    email,
+    signedBy,
+    phoneNumber,
+    lastName,
+    firstName,
+    age,
+    role,
+    gender,
+    registrationNumber,
+  });
+});
+export const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({}).select("-password");
+  res.json(users);
 });

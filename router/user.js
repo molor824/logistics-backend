@@ -3,6 +3,7 @@ import validationHandler from "../firmware/validationHandler.js";
 import {
   addUser,
   deleteUser,
+  getAllUsers,
   getProfile,
   login,
   loginValidationSchema,
@@ -14,9 +15,9 @@ import adminHandler from "../firmware/adminHandler.js";
 
 const router = e.Router();
 
+router.get("/", authenticationHandler, adminHandler, getAllUsers);
 router.get("/profile", authenticationHandler, getProfile);
-router.delete("/profile", authenticationHandler, logout);
-router.delete("/:id", authenticationHandler, adminHandler, deleteUser);
+router.post("/logout", authenticationHandler, logout);
 router.post(
   "/login",
   validationHandler(loginValidationSchema),
@@ -24,11 +25,12 @@ router.post(
   login
 );
 router.post(
-  "/",
+  "/register",
   validationHandler(userValidationSchema),
   authenticationHandler,
   adminHandler,
   addUser
 );
+router.delete("/:id", authenticationHandler, adminHandler, deleteUser);
 
 export default router;

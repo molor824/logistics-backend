@@ -2,7 +2,8 @@ import { userNotAdmin } from "../error/errors.js";
 import asyncHandler from "./asyncHandler.js";
 
 const adminHandler = asyncHandler((req, res, next) => {
-  if (!req.user?.isAdmin) {
+  const { role } = req.user;
+  if (role !== "ADMIN") {
     throw userNotAdmin();
   }
   next();

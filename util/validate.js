@@ -10,10 +10,13 @@ export default function validate(body, schema, bodyField = "body") {
       throw invalidField(bodyField);
     }
     for (const [key, value] of Object.entries(schema)) {
-      const { required, type, enums } = value;
+      const { required, type, enums, min } = value;
       const field = body[key];
       if (required && typeof field === "undefined") {
         throw missingField(key);
+      }
+      if (typeof field === "string" && field.length < min) {
+        throw invalidField(key);
       }
       if (typeof field !== "undefined") {
         switch (type) {
