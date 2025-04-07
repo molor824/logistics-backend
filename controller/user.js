@@ -58,7 +58,7 @@ export const login = asyncHandler(async (req, res) => {
   if (!isMatch) {
     throw passwordInvalid(email);
   }
-  const token = generateToken(email, user._id.toString("base64"));
+  const token = generateToken(email, user._id);
 
   respondTokenCookie(token, res);
   res.json("OK");

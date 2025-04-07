@@ -18,14 +18,9 @@ const router = e.Router();
 router.get("/", authenticationHandler, adminHandler, getAllUsers);
 router.get("/profile", authenticationHandler, getProfile);
 router.post("/logout", authenticationHandler, logout);
+router.post("/login", validationHandler(loginValidationSchema), login);
 router.post(
-  "/login",
-  validationHandler(loginValidationSchema),
-  authenticationHandler,
-  login
-);
-router.post(
-  "/register",
+  "/",
   validationHandler(userValidationSchema),
   authenticationHandler,
   adminHandler,
