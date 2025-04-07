@@ -26,7 +26,10 @@ export default function validate(body, schema, bodyField = "body") {
             }
             break;
           case "phone":
-            if (!v.isMobilePhone(field, "any")) {
+            if (
+              typeof field !== "string" ||
+              !v.matches(field, /^(\+\d{1,3})?(\s?\d){8,13}$/)
+            ) {
               throw invalidField(key);
             }
             break;

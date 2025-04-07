@@ -10,11 +10,15 @@ export const userValidationSchema = {
   email: { type: "email", required: true, min: 4 },
   phoneNumber: { type: "phone", required: true, min: 8 },
   registrationNumber: { type: "string", min: 8, required: true },
-  gender: { type: "enum", enums: ["M", "F"], required: true },
+  gender: { type: "enum", enums: ["M", "F"] },
   lastName: { type: "string", required: true, min: 2 },
   firstName: { type: "string", required: true, min: 2 },
   age: { type: "number", required: true },
-  role: { type: "enum", enums: ["ADMIN", "FINANCE"], required: true },
+  role: {
+    type: "enum",
+    enums: ["ADMIN", "FINANCE", "CASHIER", "VEHICLE_MANAGER"],
+    required: true,
+  },
   password: { type: "string", required: true, min: 8 },
 };
 export const loginValidationSchema = {
