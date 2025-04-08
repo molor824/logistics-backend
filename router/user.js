@@ -1,31 +1,31 @@
 import e from "express";
-import validationHandler from "../firmware/validationHandler.js";
 import {
   addUser,
   deleteUser,
   getAllUsers,
   getProfile,
   login,
-  loginValidationSchema,
+  loginValidation,
   logout,
-  userValidationSchema,
+  updateUser,
+  newUserValidation,
 } from "../controller/user.js";
-import authenticationHandler from "../firmware/authenticationHandler.js";
 import adminHandler from "../firmware/adminHandler.js";
+import validationHandler from "../firmware/validationHandler.js";
 
 const router = e.Router();
 
-router.get("/", authenticationHandler, adminHandler, getAllUsers);
-router.get("/profile", authenticationHandler, getProfile);
-router.post("/logout", authenticationHandler, logout);
-router.post("/login", validationHandler(loginValidationSchema), login);
-router.post(
-  "/",
-  validationHandler(userValidationSchema),
-  authenticationHandler,
+router.get("/", adminHandler, getAllUsers);
+router.get("/profile", getProfile);
+router.post("/logout", logout);
+router.post("/login", validationHandler(loginValidation), login);
+router.post("/", validationHandler(newUserValidation), adminHandler, addUser);
+router.put(
+  "/:id",
+  validationHandler(newUserValidation),
   adminHandler,
-  addUser
+  updateUser
 );
-router.delete("/:id", authenticationHandler, adminHandler, deleteUser);
+router.delete("/:id", adminHandler, deleteUser);
 
 export default router;

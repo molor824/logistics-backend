@@ -1,7 +1,7 @@
 const errorHandler = (err, req, res, next) => {
   console.error(err);
   try {
-    const { status, error } = JSON.parse(err.message);
+    const { status, error } = err;
     if (typeof status !== "number") {
       throw err;
     }
@@ -9,7 +9,7 @@ const errorHandler = (err, req, res, next) => {
   } catch {
     res.status(500).json({
       type: "UNHANDLED_ERROR",
-      message: err.message,
+      message: err,
     });
   }
 };

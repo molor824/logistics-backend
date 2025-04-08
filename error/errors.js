@@ -1,5 +1,5 @@
 export function statusMessage(status, error) {
-  return new Error(JSON.stringify({ status, error }));
+  return { status, error };
 }
 export function notFoundURL(url) {
   return statusMessage(404, { type: "URL_NOT_FOUND", url });
@@ -30,4 +30,7 @@ export function userNotFinance() {
 }
 export function userNotFound() {
   return statusMessage(404, { type: "USER_NOT_FOUND" });
+}
+export function validationError(errors) {
+  return statusMessage(400, { type: "VALIDATION_ERROR", errors });
 }

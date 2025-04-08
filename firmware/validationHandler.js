@@ -1,9 +1,11 @@
-import validate from "../util/validate.js";
-import asyncHandler from "./asyncHandler.js";
+import { validationError } from "../error/errors.js";
 
-export default function validationHandler(schema) {
-  return asyncHandler((req, res, next) => {
-    req.body = validate(req.body, schema);
+export default function validationHandler(validator) {
+  return (req, res, next) => {
+    const errors = validator.run(req);
+    if (!errors.isEmpty()) {
+      throw validationError(errors.array());
+    }
     next();
-  });
+  };
 }

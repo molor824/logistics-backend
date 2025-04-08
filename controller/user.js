@@ -3,28 +3,83 @@ import asyncHandler from "../firmware/asyncHandler.js";
 import { passwordInvalid, userNotFound } from "../error/errors.js";
 import { generateToken } from "../util/jwt.js";
 import bcrypt from "bcrypt";
+import { checkSchema } from "express-validator";
 
 const MAX_AGE = 1000 * 3600;
 
-export const userValidationSchema = {
-  email: { type: "email", required: true, min: 4 },
-  phoneNumber: { type: "phone", required: true, min: 8 },
-  registrationNumber: { type: "string", min: 8, required: true },
-  gender: { type: "enum", enums: ["M", "F"] },
-  lastName: { type: "string", required: true, min: 2 },
-  firstName: { type: "string", required: true, min: 2 },
-  age: { type: "number", required: true },
-  role: {
-    type: "enum",
-    enums: ["ADMIN", "FINANCE", "CASHIER", "VEHICLE_MANAGER"],
-    required: true,
+export const newUserValidation = checkSchema({
+  email: {
+    isEmail: true,
+    trim: true,
   },
-  password: { type: "string", required: true, min: 8 },
-};
-export const loginValidationSchema = {
-  email: { type: "email", required: true },
-  password: { type: "string", required: true },
-};
+  phoneNumber: {
+    trim: true,
+    isString: true,
+    matches: { options: /^(\+\d{1,3})?(\s?[0-9]){2,12}$/ },
+  },
+  registrationNumber: {
+    isString: true,
+    matches: { options: /^[А-ЯЁӨҮ]{2}[0-9]{8}$/ },
+  },
+  gender: {
+    isIn: {
+      options: [["M", "F"]],
+    },
+    optional: true,
+  },
+  lastName: {
+    isString: true,
+    isAlphanumeric: true,
+    trim: true,
+    escape: true,
+    isLength: {
+      options: { min: 2 },
+    },
+  },
+  firstName: {
+    isString: true,
+    escape: true,
+    isAlphanumeric: true,
+    isLength: {
+      options: { min: 2 },
+    },
+  },
+  age: {
+    isInt: true,
+    toInt: true,
+  },
+  role: {
+    isIn: {
+      options: [["ADMIN", "FINANCE", "CASHIER", "VEHICLE_MANAGER"]],
+    },
+  },
+  password: {
+    isStrongPassword: {
+      options: {
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+      },
+    },
+  },
+});
+export const loginValidation = checkSchema({
+  email: {
+    isEmail: true,
+    trim: true,
+  },
+  password: {
+    isStrongPassword: {
+      options: {
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+      },
+    },
+  },
+});
 export const addUser = asyncHandler(async (req, res) => {
   const { body, user } = req;
   const newUser = new User({
@@ -33,6 +88,21 @@ export const addUser = asyncHandler(async (req, res) => {
     signedBy: user._id,
   });
   await newUser.save();
+  res.json("OK");
+});
+export const updateUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { body } = req;
+
+  const user = await User.findById(id);
+  if (!user) {
+    throw userNotFound(id);
+  }
+  if (!bcrypt.compareSync(body.password, user.password)) {
+    throw passwordInvalid(id);
+  }
+
+  await User.findByIdAndUpdate(id, { ...body, password: undefined });
   res.json("OK");
 });
 
@@ -58,8 +128,7 @@ export const login = asyncHandler(async (req, res) => {
   if (!user) {
     throw userNotFound(email);
   }
-  const isMatch = bcrypt.compareSync(password, user.password);
-  if (!isMatch) {
+  if (!bcrypt.compareSync(password, user.password)) {
     throw passwordInvalid(email);
   }
   const token = generateToken(email, user._id);
