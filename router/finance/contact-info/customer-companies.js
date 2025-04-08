@@ -8,21 +8,14 @@ import {
   remove,
   validationSchema,
 } from "../../../controller/finance/contact-info/customer-companies.js";
-import validationHandler from "../../../firmware/validationHandler.js";
 
 const router = e.Router();
 
 router.get("/", authenticationHandler, financeHandler, get);
-router.post(
-  "/",
-  validationHandler(validationSchema),
-  authenticationHandler,
-  financeHandler,
-  post
-);
+router.post("/", validationSchema, authenticationHandler, financeHandler, post);
 router.put(
   "/:id",
-  validationHandler(validationSchema),
+  validationSchema,
   authenticationHandler,
   financeHandler,
   put

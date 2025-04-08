@@ -3,83 +3,30 @@ import asyncHandler from "../firmware/asyncHandler.js";
 import { passwordInvalid, userNotFound } from "../error/errors.js";
 import { generateToken } from "../util/jwt.js";
 import bcrypt from "bcrypt";
-import { checkSchema } from "express-validator";
+import validateAll from "../firmware/validateAll.js";
+import { body } from "express-validator";
 
 const MAX_AGE = 1000 * 3600;
 
-export const newUserValidation = checkSchema({
-  email: {
-    isEmail: true,
-    trim: true,
-  },
-  phoneNumber: {
-    trim: true,
-    isString: true,
-    matches: { options: /^(\+\d{1,3})?(\s?[0-9]){2,12}$/ },
-  },
-  registrationNumber: {
-    isString: true,
-    matches: { options: /^[А-ЯЁӨҮ]{2}[0-9]{8}$/ },
-  },
-  gender: {
-    isIn: {
-      options: [["M", "F"]],
-    },
-    optional: true,
-  },
-  lastName: {
-    isString: true,
-    isAlphanumeric: true,
-    trim: true,
-    escape: true,
-    isLength: {
-      options: { min: 2 },
-    },
-  },
-  firstName: {
-    isString: true,
-    escape: true,
-    isAlphanumeric: true,
-    isLength: {
-      options: { min: 2 },
-    },
-  },
-  age: {
-    isInt: true,
-    toInt: true,
-  },
-  role: {
-    isIn: {
-      options: [["ADMIN", "FINANCE", "CASHIER", "VEHICLE_MANAGER"]],
-    },
-  },
-  password: {
-    isStrongPassword: {
-      options: {
-        minLength: 8,
-        minLowercase: 1,
-        minUppercase: 1,
-        minNumbers: 1,
-      },
-    },
-  },
-});
-export const loginValidation = checkSchema({
-  email: {
-    isEmail: true,
-    trim: true,
-  },
-  password: {
-    isStrongPassword: {
-      options: {
-        minLength: 8,
-        minLowercase: 1,
-        minUppercase: 1,
-        minNumbers: 1,
-      },
-    },
-  },
-});
+export const newUserValidation = validateAll([
+  body("email").trim().isEmail(),
+  body("phoneNumber")
+    .trim()
+    .matches(/^(\+\d{1,3}\s?)?([0-9]){2,12}$/),
+  body("registrationNumber")
+    .trim()
+    .matches(/^[А-ЯЁӨҮ]{2}[0-9]{8}$/),
+  body("gender").trim().isIn(["M", "F", "O"]),
+  body("lastName").trim().escape(),
+  body("firstName").trim().escape(),
+  body("age").isInt({ min: 18 }),
+  body("role").isIn(["ADMIN", "FINANCE", "CASHIER", "VEHICLE_MANAGER"]),
+  body("password").isLength({ min: 8 }),
+]);
+export const loginValidation = validateAll([
+  body("email").isEmail(),
+  body("password"),
+]);
 export const addUser = asyncHandler(async (req, res) => {
   const { body, user } = req;
   const newUser = new User({
@@ -115,10 +62,7 @@ function respondTokenCookie(token, res) {
 }
 export const deleteUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const user = await User.findByIdAndDelete(id);
-  if (!user) {
-    throw userNotFound();
-  }
+  await User.findByIdAndDelete(id);
   res.json("OK");
 });
 export const login = asyncHandler(async (req, res) => {

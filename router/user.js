@@ -11,21 +11,28 @@ import {
   newUserValidation,
 } from "../controller/user.js";
 import adminHandler from "../firmware/adminHandler.js";
-import validationHandler from "../firmware/validationHandler.js";
+import authenticationHandler from "../firmware/authenticationHandler.js";
 
 const router = e.Router();
 
-router.get("/", adminHandler, getAllUsers);
-router.get("/profile", getProfile);
+router.get("/", authenticationHandler, adminHandler, getAllUsers);
+router.get("/profile", authenticationHandler, getProfile);
 router.post("/logout", logout);
-router.post("/login", validationHandler(loginValidation), login);
-router.post("/", validationHandler(newUserValidation), adminHandler, addUser);
+router.post("/login", loginValidation, login);
+router.post(
+  "/",
+  newUserValidation,
+  authenticationHandler,
+  adminHandler,
+  addUser
+);
 router.put(
   "/:id",
-  validationHandler(newUserValidation),
+  newUserValidation,
+  authenticationHandler,
   adminHandler,
   updateUser
 );
-router.delete("/:id", adminHandler, deleteUser);
+router.delete("/:id", authenticationHandler, adminHandler, deleteUser);
 
 export default router;

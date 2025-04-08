@@ -1,31 +1,15 @@
+import { body } from "express-validator";
 import asyncHandler from "../../../firmware/asyncHandler.js";
+import validateAll from "../../../firmware/validateAll.js";
 import CustomerCompanies from "../../../model/finance/contact-info/customer-companies.js";
 
-export const validationSchema = {
-  abbreviation: {
-    type: "string",
-    required: true,
-    min: 3,
-  },
-  companyName: {
-    type: "string",
-    required: true,
-    min: 4,
-  },
-  isBroker: {
-    type: "boolean",
-    required: true,
-  },
-  account: {
-    type: "string",
-    required: true,
-    min: 4,
-  },
-  contactNumber: {
-    type: "number",
-    required: true,
-  },
-};
+export const validationSchema = validateAll([
+  body("abbreviation").isString().isLength({ min: 3 }).escape(),
+  body("companyName").isString().isLength({ min: 4 }).escape(),
+  body("isBroker").isBoolean(),
+  body("account").isString().isLength({ min: 4 }).escape(),
+  body("contactNumber").isInt({ min: 0 }),
+]);
 
 export const get = asyncHandler(async (req, res) => {
   const companies = await CustomerCompanies.find({});

@@ -1,12 +1,13 @@
 const errorHandler = (err, req, res, next) => {
-  console.error(err);
   try {
     const { status, error } = err;
     if (typeof status !== "number") {
       throw err;
     }
+    console.error(error);
     res.status(status).json(error);
   } catch {
+    console.error(err);
     res.status(500).json({
       type: "UNHANDLED_ERROR",
       message: err,
