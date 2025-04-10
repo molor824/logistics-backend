@@ -3,7 +3,6 @@ import asyncHandler from "./asyncHandler.js";
 
 /**
  * @param {import("express-validator").ContextRunner[]} validations
- * @returns
  */
 export default function validateAll(validations) {
   return asyncHandler(async (req, res, next) => {

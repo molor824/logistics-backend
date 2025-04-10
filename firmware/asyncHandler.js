@@ -1,7 +1,7 @@
 /**
  *
- * @param {(req: import("express").Request, res: import("express").Response, next) => Promise<void>} fn
- * @returns
+ * @param {import("express").RequestHandler} fn
+ * @returns {import("express").RequestHandler}
  */
 export default function asyncHandler(fn) {
   return async (req, res, next) => {

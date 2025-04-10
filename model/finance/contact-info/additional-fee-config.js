@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 const schema = mongoose.Schema({
-  categoryCode: { type: Number, required: true },
-  feeCode: { type: Number, required: true },
+  categoryCode: { type: String, required: true },
+  feeCode: { type: String, required: true },
   feeName: { type: String, required: true },
   measureUnit: { type: String, enums: ["TRAILER"], required: true },
   feeAmount: { type: Number, required: true },
