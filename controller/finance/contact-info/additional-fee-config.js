@@ -4,9 +4,9 @@ import validateAll from "../../../firmware/validateAll.js";
 import AdditionalFeeConfig from "../../../model/finance/contact-info/additional-fee-config.js";
 
 export const validateNewConfig = validateAll([
-  body("categoryCode").isString().isLength({ min: 4 }).escape(),
-  body("feeCode").isString().isLength({ min: 4 }).escape(),
-  body("feeName").isString().isLength({ min: 4 }).escape(),
+  body("categoryCode").isString().isLength({ min: 2 }).escape(),
+  body("feeCode").isString().isLength({ min: 2 }).escape(),
+  body("feeName").isString().isLength({ min: 2 }).escape(),
   body("measurmentUnit").isString().isLength({ min: 2 }).escape(),
   body("feeAmount").isInt({ min: 0 }),
 ]);

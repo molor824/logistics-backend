@@ -23,9 +23,7 @@ const schema = mongoose.Schema(
       required: true,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 const CustomerCompanies = mongoose.model("CustomerCompanies", schema);
