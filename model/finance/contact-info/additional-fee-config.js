@@ -4,7 +4,7 @@ const schema = mongoose.Schema({
   categoryCode: { type: String, required: true },
   feeCode: { type: String, required: true },
   feeName: { type: String, required: true },
-  measureUnit: { type: String, enums: ["TRAILER"], required: true },
+  measurmentUnit: { type: String, required: true },
   feeAmount: { type: Number, required: true },
 });
 

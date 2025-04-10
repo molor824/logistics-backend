@@ -7,7 +7,7 @@ export const validateNewConfig = validateAll([
   body("categoryCode").isString().isLength({ min: 4 }).escape(),
   body("feeCode").isString().isLength({ min: 4 }).escape(),
   body("feeName").isString().isLength({ min: 4 }).escape(),
-  body("measurmentUnit").isIn(["TRAILER"]).isLength({ min: 4 }).escape(),
+  body("measurmentUnit").isString().isLength({ min: 2 }).escape(),
   body("feeAmount").isInt({ min: 0 }),
 ]);
 export const getAll = asyncHandler(async (req, res) => {
