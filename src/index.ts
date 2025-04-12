@@ -1,10 +1,9 @@
 import dotenv from "dotenv";
 import express from "express";
-import * as errors from "./error/errors.js";
-import errorHandler from "./firmware/errorHandler.js";
-import userRouter from "./router/user.js";
-import customerCompanyRouter from "./router/finance/contact-info/customer-companies.js";
-import additionalFeeConfigRouter from "./router/finance/contact-info/additional-fee-config.js";
+import * as errors from "#error/errors.js";
+import errorHandler from "#firmware/errorHandler.js";
+import userRouter from "#router/user.js";
+import financeRouter from "#router/finance/index.js";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -27,11 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use("/api/users", userRouter);
-app.use("/api/finance/contact-info/customer-companies", customerCompanyRouter);
-app.use(
-  "/api/finance/contact-info/additional-fee-configs",
-  additionalFeeConfigRouter
-);
+app.use("/api/finance", financeRouter);
 
 app.get("/", (req, res) => {
   res.json("Welcome to logistics api.");

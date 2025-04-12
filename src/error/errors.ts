@@ -31,3 +31,9 @@ export function userNotFound() {
 export function validationError(errors: any) {
   return statusMessage(400, { type: "VALIDATION_ERROR", errors });
 }
+export function accountNotFound(id: string) {
+  return statusMessage(404, { type: "ACCOUNT_NOT_FOUND", id });
+}
+export function transactionNotFound(id: string) {
+  return statusMessage(404, { type: "TRANSACTION_NOT_FOUND", id });
+}
