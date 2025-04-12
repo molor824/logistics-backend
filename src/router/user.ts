@@ -9,9 +9,9 @@ import {
   logout,
   updateUser,
   newUserValidation,
-} from "../controller/user.js";
-import adminHandler from "../firmware/adminHandler.js";
-import authenticationHandler from "../firmware/authenticationHandler.js";
+} from "#controller/user.js";
+import adminHandler from "#firmware/adminHandler.js";
+import authenticationHandler from "#firmware/authenticationHandler.js";
 
 const router = e.Router();
 

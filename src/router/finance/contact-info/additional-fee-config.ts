@@ -1,13 +1,13 @@
 import e from "express";
-import authenticationHandler from "../../../firmware/authenticationHandler.js";
-import financeHandler from "../../../firmware/financeHandler.js";
+import authenticationHandler from "#firmware/authenticationHandler.js";
+import financeHandler from "#firmware/financeHandler.js";
 import {
   create,
   getAll,
   remove,
   update,
   validateNewConfig,
-} from "../../../controller/finance/contact-info/additional-fee-config.js";
+} from "#controller/finance/contact-info/additional-fee-config.js";
 
 const router = e.Router();
 

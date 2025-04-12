@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
-import { invalidToken, missingToken } from "../error/errors.js";
-import User from "../model/user.js";
-import { verifyToken } from "../util/jwt.js";
+import { invalidToken, missingToken } from "#error/errors.js";
+import User from "#model/user.js";
+import { verifyToken } from "#util/jwt.js";
 import asyncHandler from "./asyncHandler.js";
 
 export type AuthUser = InstanceType<typeof User>;

@@ -1,4 +1,4 @@
-import { userNotFinance } from "../error/errors.js";
+import { userNotFinance } from "#error/errors.js";
 import asyncHandler from "./asyncHandler.js";
 
 const financeHandler = asyncHandler(async (req, res, next) => {

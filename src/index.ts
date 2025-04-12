@@ -14,9 +14,6 @@ dotenv.config();
 const { MONGO_URI } = process.env;
 if (!MONGO_URI) throw new Error("Mongo URI not found");
 
-const db = await mongoose.connect(MONGO_URI);
-console.log(`MongoDB connected to ${db.connection.host}:${db.connection.port}`);
-
 const PORT = process.env.PORT || 8123;
 const app = express();
 
@@ -43,6 +40,12 @@ app.all("*", (req, res, next) => {
   next(errors.notFoundURL(req.url));
 });
 app.use(errorHandler);
+
+mongoose.connect(MONGO_URI).then((db) => {
+  console.log(
+    `MongoDB connected to ${db.connection.host}:${db.connection.port}`
+  );
+});
 
 app.listen(PORT, () =>
   console.log(`listening at port http://localhost:${PORT}`)

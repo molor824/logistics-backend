@@ -1,7 +1,7 @@
 import { body } from "express-validator";
-import asyncHandler from "../../../firmware/asyncHandler.js";
-import validateAll from "../../../firmware/validateAll.js";
-import CustomerCompanies from "../../../model/finance/contact-info/customer-companies.js";
+import asyncHandler from "#firmware/asyncHandler.js";
+import validateAll from "#firmware/validateAll.js";
+import CustomerCompanies from "#model/finance/contact-info/customer-companies.js";
 
 export const validationSchema = validateAll([
   body("abbreviation").isString().isLength({ min: 3 }).escape(),

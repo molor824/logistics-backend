@@ -1,7 +1,7 @@
 import { body } from "express-validator";
-import asyncHandler from "../../../firmware/asyncHandler.js";
-import validateAll from "../../../firmware/validateAll.js";
-import AdditionalFeeConfig from "../../../model/finance/contact-info/additional-fee-config.js";
+import asyncHandler from "#firmware/asyncHandler.js";
+import validateAll from "#firmware/validateAll.js";
+import AdditionalFeeConfig from "#model/finance/contact-info/additional-fee-config.js";
 
 export const validateNewConfig = validateAll([
   body("categoryCode").isString().isLength({ min: 2 }).escape(),

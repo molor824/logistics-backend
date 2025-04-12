@@ -1,11 +1,11 @@
-import User from "../model/user.js";
-import asyncHandler from "../firmware/asyncHandler.js";
-import { passwordInvalid, userNotFound } from "../error/errors.js";
-import { generateToken } from "../util/jwt.js";
-import bcrypt from "bcrypt";
-import validateAll from "../firmware/validateAll.js";
+import User from "#model/user.js";
+import asyncHandler from "#firmware/asyncHandler.js";
+import { passwordInvalid, userNotFound } from "#error/errors.js";
+import { generateToken } from "#util/jwt.js";
+import validateAll from "#firmware/validateAll.js";
+import { AuthUser } from "#firmware/authenticationHandler.js";
 import { body } from "express-validator";
-import { AuthUser } from "../firmware/authenticationHandler.js";
+import bcrypt from "bcrypt";
 import { Response } from "express";
 
 const MAX_AGE = 1000 * 3600;

@@ -1,13 +1,13 @@
 import e from "express";
-import authenticationHandler from "../../../firmware/authenticationHandler.js";
-import financeHandler from "../../../firmware/financeHandler.js";
+import authenticationHandler from "#firmware/authenticationHandler.js";
+import financeHandler from "#firmware/financeHandler.js";
 import {
   get,
   post,
   put,
   remove,
   validationSchema,
-} from "../../../controller/finance/contact-info/customer-companies.js";
+} from "#controller/finance/contact-info/customer-companies.js";
 
 const router = e.Router();
 

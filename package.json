@@ -1,12 +1,14 @@
 {
   "name": "logistics-backend",
   "version": "1.0.0",
-  "main": "./src/index.ts",
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node ./dist/index.js",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' ."
+    "start": "node --env-file .env ./dist/index.js",
+    "dev": "tsx --watch --env-file .env src/index.ts"
+  },
+  "imports": {
+    "#*": "./dist/*"
   },
   "author": "",
   "license": "",
@@ -32,7 +34,7 @@
     "@types/mongoose": "^5.11.97",
     "@types/node": "^22.14.0",
     "nodemon": "^3.1.9",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.19.3",
     "typescript": "^5.8.3"
   }
 }

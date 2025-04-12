@@ -1,5 +1,5 @@
 import { ValidationChain } from "express-validator";
-import { validationError } from "../error/errors.js";
+import { validationError } from "#error/errors.js";
 import asyncHandler from "./asyncHandler.js";
 
 export default function validateAll(validations: ValidationChain[]) {
