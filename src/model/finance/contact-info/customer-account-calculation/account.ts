@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const schema = mongoose.Schema(
+const schema = new mongoose.Schema(
   {
     account: { type: String, required: true, unique: true },
     customerName: { type: String, required: true },

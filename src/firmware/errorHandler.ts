@@ -1,4 +1,6 @@
-const errorHandler = (err, req, res, next) => {
+import { ErrorRequestHandler } from "express";
+
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   try {
     const { status, error } = err;
     if (typeof status !== "number") {

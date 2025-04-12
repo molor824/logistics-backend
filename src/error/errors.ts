@@ -1,19 +1,16 @@
-export function statusMessage(status, error) {
+export function statusMessage(status: number, error: any) {
   return { status, error };
 }
-export function notFoundURL(url) {
+export function notFoundURL(url: string) {
   return statusMessage(404, { type: "URL_NOT_FOUND", url });
 }
-export function invalidField(field) {
+export function invalidField(field: string) {
   return statusMessage(400, { type: "INVALID_FIELD", field });
 }
-export function missingField(field) {
+export function missingField(field: string) {
   return statusMessage(404, { type: "MISSING_FIELD", field });
 }
-export function emailNotFound(email) {
-  return statusMessage(404, { type: "EMAIL_NOT_FOUND", email });
-}
-export function passwordInvalid(email) {
+export function passwordInvalid(email: string) {
   return statusMessage(401, { type: "INVALID_PASSWORD", email });
 }
 export function missingToken() {
@@ -31,6 +28,6 @@ export function userNotFinance() {
 export function userNotFound() {
   return statusMessage(404, { type: "USER_NOT_FOUND" });
 }
-export function validationError(errors) {
+export function validationError(errors: any) {
   return statusMessage(400, { type: "VALIDATION_ERROR", errors });
 }

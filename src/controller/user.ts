@@ -5,6 +5,8 @@ import { generateToken } from "../util/jwt.js";
 import bcrypt from "bcrypt";
 import validateAll from "../firmware/validateAll.js";
 import { body } from "express-validator";
+import { AuthUser } from "../firmware/authenticationHandler.js";
+import { Response } from "express";
 
 const MAX_AGE = 1000 * 3600;
 
@@ -28,7 +30,8 @@ export const loginValidation = validateAll([
   body("password"),
 ]);
 export const addUser = asyncHandler(async (req, res) => {
-  const { body, user } = req;
+  const { body } = req;
+  const user = res.locals.user as AuthUser;
   const newUser = new User({
     ...body,
     password: bcrypt.hashSync(body.password, 10),
@@ -43,7 +46,7 @@ export const updateUser = asyncHandler(async (req, res) => {
 
   const user = await User.findById(id);
   if (!user) {
-    throw userNotFound(id);
+    throw userNotFound();
   }
   if (!bcrypt.compareSync(body.password, user.password)) {
     throw passwordInvalid(id);
@@ -53,7 +56,7 @@ export const updateUser = asyncHandler(async (req, res) => {
   res.json("OK");
 });
 
-function respondTokenCookie(token, res) {
+function respondTokenCookie(token: string, res: Response) {
   res.cookie("jwt", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV !== "development",
@@ -70,7 +73,7 @@ export const login = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email });
   if (!user) {
-    throw userNotFound(email);
+    throw userNotFound();
   }
   if (!bcrypt.compareSync(password, user.password)) {
     throw passwordInvalid(email);
@@ -95,7 +98,7 @@ export const getProfile = asyncHandler(async (req, res) => {
     role,
     gender,
     registrationNumber,
-  } = req.user;
+  } = res.locals.user as AuthUser;
   res.json({
     email,
     signedBy,
