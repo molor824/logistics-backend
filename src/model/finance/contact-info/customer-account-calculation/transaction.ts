@@ -10,7 +10,7 @@ const schema = new Schema(
     cash: { type: Number, required: true },
     nonCash: { type: Number, required: true },
     receipt: { type: String, required: true },
-    payer: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    payer: { type: String, required: true },
   },
   { timestamps: true }
 );
