@@ -11,21 +11,11 @@ import {
 
 const router = e.Router();
 
-router.get("/", authenticationHandler, financeHandler, getAll);
-router.post(
-  "/",
-  validateNewConfig,
-  authenticationHandler,
-  financeHandler,
-  create
-);
-router.put(
-  "/:id",
-  validateNewConfig,
-  authenticationHandler,
-  financeHandler,
-  update
-);
-router.delete("/:id", authenticationHandler, financeHandler, remove);
+router.use(authenticationHandler, financeHandler);
+
+router.get("/", getAll);
+router.post("/", validateNewConfig, create);
+router.put("/:id", validateNewConfig, update);
+router.delete("/:id", remove);
 
 export default router;

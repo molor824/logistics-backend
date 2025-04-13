@@ -5,7 +5,7 @@ import customerAccountRouter from "./contact-info/customer-account-calculations/
 import customerTransactionsRouter from "./contact-info/customer-account-calculations/transactions.js";
 
 const router = Router();
-router.use("/contact-info/additional-fee-config", additionalFeeConfigRouter);
+router.use("/contact-info/additional-fee-configs", additionalFeeConfigRouter);
 router.use("/contact-info/customer-companies", customerCompaniesRouter);
 router.use(
   "/contact-info/customer-account-calculations/accounts",

@@ -11,15 +11,11 @@ import {
 
 const router = e.Router();
 
-router.get("/", authenticationHandler, financeHandler, get);
-router.post("/", validationSchema, authenticationHandler, financeHandler, post);
-router.put(
-  "/:id",
-  validationSchema,
-  authenticationHandler,
-  financeHandler,
-  put
-);
-router.delete("/:id", authenticationHandler, financeHandler, remove);
+router.use(authenticationHandler, financeHandler);
+
+router.get("/", get);
+router.post("/", validationSchema, post);
+router.put("/:id", validationSchema, put);
+router.delete("/:id", remove);
 
 export default router;

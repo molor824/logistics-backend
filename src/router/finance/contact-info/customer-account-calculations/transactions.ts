@@ -8,7 +8,9 @@ import { Router } from "express";
 
 const router = Router();
 
-router.get("/", authenticationHandler, financeHandler, getTransactions);
-router.get("/:id", authenticationHandler, financeHandler, getTransaction);
+router.use(authenticationHandler, financeHandler);
+
+router.get("/", getTransactions);
+router.get("/:id", getTransaction);
 
 export default router;
