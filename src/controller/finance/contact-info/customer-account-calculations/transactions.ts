@@ -17,11 +17,11 @@ const getAccount = async (transaction: any) => {
   if (!account) {
     throw accountNotFound(transaction.account.toString());
   }
-  return { ...transaction, account };
+  return { ...transaction.toObject(), account };
 };
 
 export const newTransactionValidation = validateAll([
-  body("account._id").isMongoId(),
+  body("account").isMongoId(),
   body("cash").isInt({ min: 0 }),
   body("nonCash").isInt({ min: 0 }),
   body("receipt").notEmpty().escape(),
@@ -42,11 +42,7 @@ export const getTransaction = asyncHandler(async (req, res) => {
   res.json(await getAccount(transactions));
 });
 export const addTransaction = asyncHandler(async (req, res) => {
-  const { body } = req;
-  const transaction = new CustomerTransaction({
-    ...body,
-    account: body.account._id,
-  });
+  const transaction = new CustomerTransaction(req.body);
   await transaction.save();
   res.json("OK");
 });

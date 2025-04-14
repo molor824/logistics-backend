@@ -23,7 +23,6 @@ export const newUserValidation = validateAll([
   body("firstName").trim().escape(),
   body("age").isInt({ min: 18 }),
   body("role").isIn(["ADMIN", "FINANCE", "CASHIER", "VEHICLE_MANAGER"]),
-  body("password").isLength({ min: 8 }),
 ]);
 export const loginValidation = validateAll([
   body("email").isEmail(),
@@ -48,11 +47,8 @@ export const updateUser = asyncHandler(async (req, res) => {
   if (!user) {
     throw userNotFound();
   }
-  if (!bcrypt.compareSync(body.password, user.password)) {
-    throw passwordInvalid(id);
-  }
 
-  await User.findByIdAndUpdate(id, { ...body, password: undefined });
+  await User.findByIdAndUpdate(id, { ...body });
   res.json("OK");
 });
 
