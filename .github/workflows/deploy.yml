@@ -17,6 +17,7 @@ jobs:
           echo "Removing previous containers..."
           docker ps -a --filter "name=logistics-container" --format "{{.ID}}" | xargs -r docker rm -f
 
+          echo $(pwd)
           echo "Setting up dotenv file..."
           echo "MONGO_URI=${MONGO_URI}" >> .env
           echo "JWT_SECRET=${JWT_SECRET}" >> .env
