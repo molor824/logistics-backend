@@ -7,14 +7,17 @@ import financeRouter from "#router/finance/index.js";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import path from "path";
 
 dotenv.config();
 
 const { MONGO_URI } = process.env;
 if (!MONGO_URI) throw new Error("Mongo URI not found");
 
-const PORT = process.env.PORT || 8123;
+const PORT = 8123;
 const app = express();
+
+const frontendPath = path.join(import.meta.dirname, "../frontend");
 
 app.use(
   cors({
@@ -27,12 +30,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use("/api/users", userRouter);
 app.use("/api/finance", financeRouter);
+app.use("/assets", express.static(path.join(frontendPath, "dist/assets")));
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.json("Welcome to logistics api.");
 });
 app.all("*", (req, res, next) => {
-  next(errors.notFoundURL(req.url));
+  if (req.path.startsWith("/api") || req.path.startsWith("/assets")) {
+    next(errors.notFoundURL(req.url));
+  }
+  res.sendFile(path.join(frontendPath, "dist/index.html"));
 });
 app.use(errorHandler);
 
