@@ -16,7 +16,7 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
           echo "Removing previous containers..."
-          docker ps -a --filter "name=yomimasho-container" --format "{{.ID}}" | xargs -r docker rm -f
+          docker ps -a --filter "name=logistics-container" --format "{{.ID}}" | xargs -r docker rm -f
 
           echo "Setting up dotenv file..."
           cd backend
@@ -25,9 +25,9 @@ jobs:
           cd ..
 
           echo "Building Docker image..."
-          docker build -t yomimasho .
+          docker build -t logistics .
 
           echo "Running container..."
-          docker run -d --name yomimasho-container -p 3012:3012 -p 3069:3069 yomimasho
+          docker run -d --name logistics-container -p 3012:3012 -p 3069:3069 logistics
 
           echo "Deployment complete!"
